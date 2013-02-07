@@ -32,4 +32,10 @@ void cache_access(char rw, uint64_t address, cache_stats_t* p_stats) {
  * @p_stats Pointer to the statistics structure
  */
 void complete_cache(cache_stats_t *p_stats) {
+    p_stats->accesses = p_stats->reads+p_stats->writes;
+    p_stats->misses = p_stats->read_misses+p_stats->write_misses;
+    p_stats->read_hits = p_stats->reads-p_stats->read_misses;
+    p_stats->write_hits = p_stats->writes-p_stats->write_misses;
+    p_stats->miss_rate = p_stats->misses/(double)p_stats->accesses;
+    p_stats->avg_access_time = p_stats->hit_time + p_stats->miss_rate*p_stats->miss_penalty;
 }

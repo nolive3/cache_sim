@@ -4,18 +4,18 @@
 #include <cstdint>
 
 struct cache_stats_t {
-    uint64_t accesses;
-    uint64_t reads;
-    uint64_t read_hits;
-    uint64_t read_misses;
-    uint64_t writes;
-    uint64_t write_hits;
-    uint64_t write_misses;
-    uint64_t misses;
-    uint64_t hit_time;
-    uint64_t miss_penalty;
-    double   miss_rate;
-    double   avg_access_time;
+    uint64_t accesses;                //Calculated during cleanup as reads+writes
+    uint64_t reads;                   //Calculated during runtime incremented for each read
+    uint64_t read_hits;               //Calculated during cleanup as reads-read_misses
+    uint64_t read_misses;             //Calculated during runtime incremented for each read miss
+    uint64_t writes;                  //Calculated during runtime incremented for each write
+    uint64_t write_hits;              //Calculated during cleanup as writes-write_misses
+    uint64_t write_misses;            //Calculated during runtime incremented for each write miss
+    uint64_t misses;                  //Calculated during cleanup as read_misses+write_misses
+    uint64_t hit_time;                //Calculated during setup as (2<<S + 5) / 10 The +5 is to do an integer division ceil (cant take part of a cycle)
+    uint64_t miss_penalty;            //Calculated during setup as hit_time + 50 + BLOCKING&&B>2?1<<(B-2):1
+    double   miss_rate;;
+    double   avg_access_time;;
     uint64_t storage_overhead;
     double   storage_overhead_ratio;
 };
