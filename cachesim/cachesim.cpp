@@ -1,4 +1,7 @@
 #include "cachesim.hpp"
+#include "Cache_State.h"
+
+Cache_State current;
 
 /**
  * Subroutine for initializing the cache. You many add and initialize any global or heap
@@ -12,6 +15,7 @@
  * @r The replacement policy, LRU or NMRU_FIFO (refer to project description for details)
  */
 void setup_cache(uint64_t c, uint64_t b, uint64_t s, char f, char r) {
+    current = new Cache_State(c,b,s,f==BLOCKING,r==LRU);
 }
 /**
  * Subroutine that simulates the cache one trace event at a time.
@@ -32,10 +36,16 @@ void cache_access(char rw, uint64_t address, cache_stats_t* p_stats) {
  * @p_stats Pointer to the statistics structure
  */
 void complete_cache(cache_stats_t *p_stats) {
+    p_stats->hit_time = (2<<current.s() + 5) / 10;
     p_stats->accesses = p_stats->reads+p_stats->writes;
     p_stats->misses = p_stats->read_misses+p_stats->write_misses;
     p_stats->read_hits = p_stats->reads-p_stats->read_misses;
     p_stats->write_hits = p_stats->writes-p_stats->write_misses;
     p_stats->miss_rate = p_stats->misses/(double)p_stats->accesses;
     p_stats->avg_access_time = p_stats->hit_time + p_stats->miss_rate*p_stats->miss_penalty;
+    uint64_t per_block = (current.f()?1:1<<current.b())+current.r()?8:4;
+    p_stats->storage_overhead = per_block * (48<<13/(8<<B+per_block));
+    p_stats->storage_overhead_ratio = p_stats->storage_overhead/((double)48<<13);
+    p_stats->miss_penalty = p_stats->hit_time + 50 + (current.f()&&current.b()>2)?(1<<(B-2)):1
+    delete current;
 }
