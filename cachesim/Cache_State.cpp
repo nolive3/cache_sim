@@ -53,7 +53,7 @@ uint64_t Cache_State::offset(uint64_t addr) const
 uint64_t Cache_State::valid(uint64_t addr) const
 {
     for(uint64_t i = 0; i < (uint64_t)1<<m_s; i++){ // look through the appropriate set for a block that has a matching tag AND the proper byte is valid
-        if(m_valid[index(addr)][i][offset(addr)] && m_tagstore[index(addr)]->get(i) == tag(addr)){ // if found it is a hit
+        if(m_valid[index(addr)][i][offset(addr)] && m_tagstore[index(addr)]->contains(i, tag(addr))){ // if found it is a hit
             return true;
         }
     }

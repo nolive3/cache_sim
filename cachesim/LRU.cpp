@@ -1,11 +1,11 @@
 #include "LRU.h"
-uint64_t mLRU::get(uint64_t index) const
+bool mLRU::contains(uint64_t index,uint64_t tag) const
 {
     for (uint64_t i = 0; i < (uint64_t)1<<m_s; i++){
         if(m_indexes[i] == index)
-            return m_tags[i];
+            return m_tags[i]==tag;
     }
-    return -1;
+    return false;
 }
 uint64_t mLRU::get_victim(uint64_t tag)
 {
