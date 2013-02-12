@@ -16,6 +16,7 @@ class Tag_Store
 
     protected:
         uint64_t m_s;
+        uint64_t m_last;
         uint64_t* m_tags;
         uint64_t* m_indexes;
     private:

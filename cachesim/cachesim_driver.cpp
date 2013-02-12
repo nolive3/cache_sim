@@ -85,8 +85,6 @@ int main(int argc, char* argv[]) {
     complete_cache(&stats);
 
     print_statistics(&stats);
-    int x;
-    std::cin >> x;
 
     return 0;
 }

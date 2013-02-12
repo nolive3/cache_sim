@@ -14,6 +14,9 @@ uint64_t mLRU::get_victim(uint64_t tag)
         m_tags[i-1] = m_tags[i];
         m_indexes[i-1] = m_indexes[i];
     }
+    if(v == (uint64_t)-1){
+        v = m_last++;
+    }
     m_tags[(1<<m_s)-1] = tag;
     m_indexes[(1<<m_s)-1] = v;
     return v;

@@ -1,8 +1,8 @@
 #include "Cache_State.h"
 #include "LRU.h"
 #include "NMRU_FIFO.h"
+#include <iostream>
 
-//number of sets is ((48<<13)/((8<<B)+((f?1:(1<<b))+r?8:4)));
 Cache_State::Cache_State(uint64_t nc, uint64_t nb, uint64_t ns, bool is_blocking, bool is_lru) : m_valid(new bool**[1<<(nc-nb-ns)]), m_tagstore(new Tag_Store*[1<<(nc-nb-ns)]), m_c(nc), m_b(nb), m_s(ns), m_f(is_blocking), m_r(is_lru)
 {
     for (uint64_t i = 0; i< (uint64_t)1<<(nc-nb-ns); i++){
@@ -29,6 +29,9 @@ Cache_State::~Cache_State()
         delete [] m_valid[i];
     }
     delete [] m_valid;
+    for (uint64_t i = 0; i< (uint64_t)1<<(m_c-m_b-m_s); i++){
+        delete m_tagstore[i];
+    }
     delete [] m_tagstore;
 }
 
