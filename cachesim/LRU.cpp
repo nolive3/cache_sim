@@ -2,8 +2,8 @@
 bool mLRU::contains(uint64_t index,uint64_t tag) const
 {
     for (uint64_t i = 0; i < (uint64_t)1<<m_s; i++){
-        if(m_indexes[i] == index)
-            return m_tags[i]==tag;
+        if(m_indexes[i] == index && m_tags[i]==tag)
+            return true;
     }
     return false;
 }
@@ -27,7 +27,7 @@ void mLRU::touch(uint64_t tag)
     uint64_t index;
 
     for (i = 0; i < (uint64_t)1<<m_s; i++){
-        if(m_tags[i] == tag) // find the tag in the set
+        if(m_tags[i] == tag && m_indexes[i]!=(uint64_t)-1) // find the tag in the set
             break;
     }
     index = m_indexes[i];

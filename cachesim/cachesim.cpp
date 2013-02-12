@@ -15,7 +15,7 @@ Cache_State * current;
  * @f The fetch policy, BLOCKING or EAGER (refer to project description for details)
  * @r The replacement policy, LRU or NMRU_FIFO (refer to project description for details)
  */
-void setup_cache(uint64_t c, uint64_t b, uint64_t s, char f, char r) {
+void setup_cache(uint64_t c, uint64_t b, uint64_t s, char f, char r) { // makes the cache
     current = new Cache_State(c,b,s,f==BLOCKING,r==LRU);
 }
 /**
@@ -26,7 +26,7 @@ void setup_cache(uint64_t c, uint64_t b, uint64_t s, char f, char r) {
  * @address  The target memory address
  * @p_stats Pointer to the statistics structure
  */
-void cache_access(char rw, uint64_t address, cache_stats_t* p_stats) {
+void cache_access(char rw, uint64_t address, cache_stats_t* p_stats) { // fowards the access to the appropriate cache state function
     switch (rw){
     case READ:
         current->read(address, p_stats);
@@ -46,7 +46,7 @@ void cache_access(char rw, uint64_t address, cache_stats_t* p_stats) {
  *
  * @p_stats Pointer to the statistics structure
  */
-void complete_cache(cache_stats_t *p_stats) {
+void complete_cache(cache_stats_t *p_stats) { // calculates the stats acording to the formulas given.
     p_stats->hit_time = ((2<<current->s()) + 9) / 10;
     p_stats->miss_penalty = p_stats->hit_time + 50 + ((current->f()&&(current->b()>2))?(1<<(current->b()-2)):1);
     p_stats->accesses = p_stats->reads+p_stats->writes;

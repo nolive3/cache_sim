@@ -9,6 +9,9 @@ Cache_State::Cache_State(uint64_t nc, uint64_t nb, uint64_t ns, bool is_blocking
         m_valid[i] = new bool*[1<<ns];
         for (uint64_t j = 0; j < (uint64_t)1<<m_s; j++){
             m_valid[i][j] = new bool[1<<nb];
+            for (uint64_t k = 0; k < (uint64_t)1<<m_b; k++){
+                m_valid[i][j][k] = false;
+            }
         }
     }
     for (uint64_t i = 0; i< (uint64_t)1<<(nc-nb-ns); i++){
