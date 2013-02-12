@@ -55,7 +55,7 @@ uint64_t Cache_State::valid(uint64_t addr) const
 void Cache_State::get(uint64_t addr)
 {
     for(uint64_t i = 0; i < (uint64_t)1<<m_b; i++){
-        if(m_f || i>offset(addr))
+        if(m_f || i>=offset(addr))
             m_valid[index(addr)][0][i] = true;
     }
     m_tagstore[index(addr)][0] = tag(addr);
