@@ -33,6 +33,12 @@
 		</Compiler>
 		<Unit filename="Cache_State.cpp" />
 		<Unit filename="Cache_State.h" />
+		<Unit filename="LRU.cpp" />
+		<Unit filename="LRU.h" />
+		<Unit filename="NMRU_FIFO.cpp" />
+		<Unit filename="NMRU_FIFO.h" />
+		<Unit filename="Tag_Store.cpp" />
+		<Unit filename="Tag_Store.h" />
 		<Unit filename="cachesim.cpp" />
 		<Unit filename="cachesim.hpp" />
 		<Unit filename="cachesim_driver.cpp" />

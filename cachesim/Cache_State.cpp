@@ -1,30 +1,34 @@
 #include "Cache_State.h"
+#include "LRU.h"
+#include "NMRU_FIFO.h"
+
 //number of sets is ((48<<13)/((8<<B)+((f?1:(1<<b))+r?8:4)));
-Cache_State::Cache_State(uint64_t nc, uint64_t nb, uint64_t ns, bool is_blocking, bool is_lru) : m_valid(new bool**[((48<<13)/((8<<nb)+((is_blocking?1:(1<<nb))+is_lru?8:4)))]), m_tagstore(new uint64_t*[((48<<13)/((8<<nb)+((is_blocking?1:(1<<nb))+is_lru?8:4)))]), m_c(nc), m_b(nb), m_s(ns), m_f(is_blocking), m_r(is_lru)
+Cache_State::Cache_State(uint64_t nc, uint64_t nb, uint64_t ns, bool is_blocking, bool is_lru) : m_valid(new bool**[1<<(nc-nb-ns)]), m_tagstore(new Tag_Store*[1<<(nc-nb-ns)]), m_c(nc), m_b(nb), m_s(ns), m_f(is_blocking), m_r(is_lru)
 {
-    for (uint64_t i = 0; i< (uint64_t)((48<<13)/((8<<m_b)+((m_f?1:(1<<m_b))+m_r?8:4))); i++){
+    for (uint64_t i = 0; i< (uint64_t)1<<(nc-nb-ns); i++){
         m_valid[i] = new bool*[1<<ns];
         for (uint64_t j = 0; j < (uint64_t)1<<m_s; j++){
             m_valid[i][j] = new bool[1<<nb];
         }
     }
-    for (uint64_t i = 0; i< (uint64_t)((48<<13)/((8<<m_b)+((m_f?1:(1<<m_b))+m_r?8:4))); i++){
-        m_tagstore[i] = new uint64_t[1<<ns];
+    for (uint64_t i = 0; i< (uint64_t)1<<(nc-nb-ns); i++){
+        if(is_lru) {
+            m_tagstore[i] = new mLRU(m_s);
+        }else{
+            m_tagstore[i] = new mNMRU_FIFO(m_s);
+        }
     }
 }
 
 Cache_State::~Cache_State()
 {
-    for (uint64_t i = 0; i< (uint64_t)((48<<13)/((8<<m_b)+((m_f?1:(1<<m_b))+m_r?8:4))); i++){
+    for (uint64_t i = 0; i< (uint64_t)1<<(m_c-m_b-m_s); i++){
         for (uint64_t j = 0; j < (uint64_t)1<<m_s; j++){
             delete [] m_valid[i][j];
         }
         delete [] m_valid[i];
     }
     delete [] m_valid;
-    for (uint64_t i = 0; i< (uint64_t)((48<<13)/((8<<m_b)+((m_f?1:(1<<m_b))+m_r?8:4))); i++){
-        delete [] m_tagstore[i];
-    }
     delete [] m_tagstore;
 }
 
@@ -46,7 +50,7 @@ uint64_t Cache_State::offset(uint64_t addr) const
 uint64_t Cache_State::valid(uint64_t addr) const
 {
     for(uint64_t i = 0; i < (uint64_t)1<<m_s; i++){
-        if(m_valid[index(addr)][i][offset(addr)] && m_tagstore[index(addr)][i] == tag(addr)){
+        if(m_valid[index(addr)][i][offset(addr)] && m_tagstore[index(addr)]->get(i) == tag(addr)){
             return true;
         }
     }
@@ -54,11 +58,15 @@ uint64_t Cache_State::valid(uint64_t addr) const
 }
 void Cache_State::get(uint64_t addr)
 {
+    int victim = m_tagstore[index(addr)]->get_victim(tag(addr));
     for(uint64_t i = 0; i < (uint64_t)1<<m_b; i++){
         if(m_f || i>=offset(addr))
-            m_valid[index(addr)][0][i] = true;
+            m_valid[index(addr)][victim][i] = true;
     }
-    m_tagstore[index(addr)][0] = tag(addr);
+}
+void Cache_State::touch(uint64_t addr)
+{
+    m_tagstore[index(addr)]->touch(tag(addr));
 }
 
 void Cache_State::read(uint64_t addr, cache_stats_t* p_stats)
@@ -67,6 +75,8 @@ void Cache_State::read(uint64_t addr, cache_stats_t* p_stats)
     if(!valid(addr)){
         p_stats->read_misses++;
         get(addr);
+    }else{
+        touch(addr);
     }
 }
 void Cache_State::write(uint64_t addr, cache_stats_t* p_stats)
@@ -75,5 +85,7 @@ void Cache_State::write(uint64_t addr, cache_stats_t* p_stats)
     if(!valid(addr)){
         p_stats->write_misses++;
         get(addr);
+    }else{
+        touch(addr);
     }
 }

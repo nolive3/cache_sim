@@ -1,6 +1,7 @@
 #ifndef CACHE_STATE_H
 #define CACHE_STATE_H
 #include <cstdint>
+#include "Tag_Store.h"
 #include "cachesim.hpp"
 class Cache_State
 {
@@ -38,10 +39,12 @@ class Cache_State
         uint64_t tag(uint64_t addr) const;
         uint64_t index(uint64_t addr) const;
         uint64_t offset(uint64_t addr) const;
+        uint64_t get_victim(uint64_t index) const;
         uint64_t valid(uint64_t addr) const;
+        void touch(uint64_t addr);
         void get(uint64_t addr);
         bool*** m_valid; // the vaild bits [SET][Block][subblock]
-        uint64_t** m_tagstore; // the tag store [SET][block]
+        Tag_Store** m_tagstore; // the tag store [SET][block]
         uint64_t m_c; // C
         uint64_t m_b; // B
         uint64_t m_s; // S

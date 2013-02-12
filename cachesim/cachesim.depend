@@ -11,15 +11,37 @@
 1360653682 c:\users\nick\documents\github\cache_sim\cachesim\cachesim.hpp
 	<cstdint>
 
-1360652964 source:c:\users\nick\documents\github\cache_sim\cachesim\cache_state.cpp
+1360660342 source:c:\users\nick\documents\github\cache_sim\cachesim\cache_state.cpp
 	"Cache_State.h"
+	"LRU.h"
+	"NMRU_FIFO.h"
 
-1360652596 c:\users\nick\documents\github\cache_sim\cachesim\cache_state.h
+1360659643 c:\users\nick\documents\github\cache_sim\cachesim\cache_state.h
 	<cstdint>
+	"Tag_Store.h"
 	"cachesim.hpp"
 
-1360651442 source:c:\users\nick\documents\github\cache_sim\cachesim\cachesim.cpp
+1360654306 source:c:\users\nick\documents\github\cache_sim\cachesim\cachesim.cpp
 	"cachesim.hpp"
 	"Cache_State.h"
 	<iostream>
+
+1360660585 c:\users\nick\documents\github\cache_sim\cachesim\tag_store.h
+	<cstdint>
+
+1360660731 source:c:\users\nick\documents\github\cache_sim\cachesim\tag_store.cpp
+	"Tag_Store.h"
+
+1360660304 c:\users\nick\documents\github\cache_sim\cachesim\lru.h
+	"Tag_Store.h"
+
+1360660304 c:\users\nick\documents\github\cache_sim\cachesim\nmru_fifo.h
+	"Tag_Store.h"
+	<cstdint>
+
+1360660304 source:c:\users\nick\documents\github\cache_sim\cachesim\lru.cpp
+	"LRU.h"
+
+1360660796 source:c:\users\nick\documents\github\cache_sim\cachesim\nmru_fifo.cpp
+	"NMRU_FIFO.h"
 
