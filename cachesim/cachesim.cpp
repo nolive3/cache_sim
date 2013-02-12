@@ -47,7 +47,10 @@ void cache_access(char rw, uint64_t address, cache_stats_t* p_stats) {
  * @p_stats Pointer to the statistics structure
  */
 void complete_cache(cache_stats_t *p_stats) {
-    p_stats->hit_time = ((2<<current->s()) + 5) / 10;
+    std::cerr<<"C: "<<current->c()<<" B: "<<current->b()<<" S: "<<current->s()<<std::endl;
+    std::cerr<<"Blocking: "<<current->f()<<" LRU: "<<current->r()<<std::endl;
+    p_stats->hit_time = ((2<<current->s()) + 9) / 10;
+    p_stats->miss_penalty = p_stats->hit_time + 50 + ((current->f()&&(current->b()>2))?(1<<(current->b()-2)):1);
     p_stats->accesses = p_stats->reads+p_stats->writes;
     p_stats->misses = p_stats->read_misses+p_stats->write_misses;
     p_stats->read_hits = p_stats->reads-p_stats->read_misses;
@@ -57,6 +60,5 @@ void complete_cache(cache_stats_t *p_stats) {
     uint64_t per_block = (current->f()?1:1<<current->b())+current->r()?8:4;
     p_stats->storage_overhead = per_block * ((48<<13)/((8<<current->b())+per_block));
     p_stats->storage_overhead_ratio = p_stats->storage_overhead/((double)(48<<13));
-    p_stats->miss_penalty = p_stats->hit_time + 50 + (current->f()&&current->b()>2)?(1<<(current->b()-2)):1;
     delete current;
 }

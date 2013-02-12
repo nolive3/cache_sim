@@ -12,7 +12,7 @@ struct cache_stats_t {
     uint64_t write_hits;              // Calculated during cleanup as writes-write_misses
     uint64_t write_misses;            //Calculated during runtime incremented for each write miss
     uint64_t misses;                  // Calculated during cleanup as read_misses+write_misses
-    uint64_t hit_time;                // Calculated during cleanup as (2<<S + 5) / 10 The +5 is to do an integer division ceil (cant take part of a cycle)
+    uint64_t hit_time;                // Calculated during cleanup as (2<<S + 9) / 10 The +9 is to do an integer division ceil (cant take part of a cycle)
     uint64_t miss_penalty;            // Calculated during cleanup as hit_time + 50 + BLOCKING&&B>2?1<<(B-2):1
     double   miss_rate;               // Calculated during cleanup as misses/accesses
     double   avg_access_time;         // Calculated during cleanup as hit_time + miss_rate*miss_penalty
