@@ -7,7 +7,7 @@ struct cache_stats_t {
     uint64_t accesses;                // Calculated during cleanup as reads+writes
     uint64_t reads;                   // Calculated during runtime incremented for each read
     uint64_t read_hits;               // Calculated during cleanup as reads-read_misses
-    uint64_t read_misses;             // Calculated during runtime incremented for each read miss
+    uint64_t read_misses;             //Calculated during runtime incremented for each read miss
     uint64_t writes;                  // Calculated during runtime incremented for each write
     uint64_t write_hits;              // Calculated during cleanup as writes-write_misses
     uint64_t write_misses;            //Calculated during runtime incremented for each write miss

@@ -55,8 +55,8 @@ void complete_cache(cache_stats_t *p_stats) {
     p_stats->write_hits = p_stats->writes-p_stats->write_misses;
     p_stats->miss_rate = p_stats->misses/(double)p_stats->accesses;
     p_stats->avg_access_time = p_stats->hit_time + p_stats->miss_rate*p_stats->miss_penalty;
-    uint64_t per_block = (current->f()?1:1<<current->b())+current->r()?8:4;
-    p_stats->storage_overhead = per_block * ((48<<13)/((8<<current->b())+per_block));
-    p_stats->storage_overhead_ratio = p_stats->storage_overhead/((double)(48<<13));
+    uint64_t per_block = (current->f()?1:(1<<current->b()))+(current->r()?8:4)+1;
+    p_stats->storage_overhead = per_block * (1<<(current->c()-current->b()));
+    p_stats->storage_overhead_ratio = p_stats->storage_overhead/((double)(8<<current->c()));
     delete current;
 }
