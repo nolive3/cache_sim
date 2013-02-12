@@ -1,40 +1,75 @@
 #include "LRU.h"
-bool mLRU::contains(uint64_t index,uint64_t tag) const
+
+
+bool mLRU::access(uint64_t addr)
+{
+    if(contains(addr)){
+        touch(addr);
+        return true;
+    } else if(contains_but_not_valid(addr)){
+        touch(addr);
+        return false;
+    } else {
+        get_victim(addr);
+        return false;
+    }
+}
+
+
+bool mLRU::contains(uint64_t addr) const
 {
     for (uint64_t i = 0; i < (uint64_t)1<<m_s; i++){
-        if(m_indexes[i] == index && m_tags[i]==tag)
+        if(m_valid[i][offset(addr)] && m_tags[i]==tag(addr))
             return true;
     }
     return false;
 }
-uint64_t mLRU::get_victim(uint64_t tag)
+bool mLRU::contains_but_not_valid(uint64_t addr) const
 {
-    uint64_t v = m_indexes[0]; // kick out the least recently used
+    for (uint64_t i = 0; i < (uint64_t)1<<m_s; i++){
+        if(m_tags[i]==tag(addr))
+            return true;
+    }
+    return false;
+}
+
+
+void mLRU::get_victim(uint64_t addr)
+{
+    bool * valids = m_valid[0]; // save the space from the evicted valid bits
     for (uint64_t i = 1; i < (uint64_t)1<<m_s; i++){
         m_tags[i-1] = m_tags[i];// move everyone foward
-        m_indexes[i-1] = m_indexes[i];
+        m_valid[i-1] = m_valid[i];
     }
-    if(v == (uint64_t)-1){
-        v = m_last++; // if we kicked out an invalid make the index something useful
+    m_valid[(1<<m_s)-1] = valids; // set the new valid bits
+    for(uint64_t i = 0; i < (uint64_t)1<<m_b; i++){
+        if(i>=offset(addr) || m_r) // if it is blocking of this is after the requested byte the it gets fetched
+            valids[i] = true;
+        else
+            valids[i] = false; // otherwise it does not
     }
-    m_tags[(1<<m_s)-1] = tag;
-    m_indexes[(1<<m_s)-1] = v; // store the new guy at the end as the most recently used
-    return v;
+    m_tags[(1<<m_s)-1] = tag(addr); // store the new guy at the end as the most recently used
 }
-void mLRU::touch(uint64_t tag)
+
+
+void mLRU::touch(uint64_t addr)
 {
     uint64_t i;
-    uint64_t index;
+    bool* valids;
 
     for (i = 0; i < (uint64_t)1<<m_s; i++){
-        if(m_tags[i] == tag && m_indexes[i]!=(uint64_t)-1) // find the tag in the set
+        if(m_tags[i] == tag(addr)) // find the tag in the set
             break;
     }
-    index = m_indexes[i];
+    valids = m_valid[i];
     for (i = i+1;i < (uint64_t)1<<m_s; i++){
         m_tags[i-1] = m_tags[i];
-        m_indexes[i-1] = m_indexes[i];//move everyone who had been used more recently foward
+        m_valid[i-1] = m_valid[i];//move everyone who had been used more recently foward
     }
-    m_tags[(1<<m_s)-1] = tag; // store the guy who just got used at the end
-    m_indexes[(1<<m_s)-1] = index;
+    m_tags[(1<<m_s)-1] = tag(addr); // store the guy who just got used at the end
+    m_valid[(1<<m_s)-1] = valids;
+    for(i = 0; i < (uint64_t)1<<m_b; i++){
+        if(i>=offset(addr) || m_r) // if it is after requested byte then it gets fetched (for use with fetching th erst of the block in EAGER
+            valids[i] = true; // but in this case dnt invalidate ones before
+    }
 }

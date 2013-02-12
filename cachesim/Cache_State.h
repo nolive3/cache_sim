@@ -36,15 +36,8 @@ class Cache_State
         bool r() { return m_r; }
     protected:
     private:
-        uint64_t tag(uint64_t addr) const;
         uint64_t index(uint64_t addr) const;
-        uint64_t offset(uint64_t addr) const;
-        uint64_t get_victim(uint64_t index) const;
-        uint64_t valid(uint64_t addr) const;
-        void touch(uint64_t addr);
-        void get(uint64_t addr);
-        bool*** m_valid; // the vaild bits [SET][Block][subblock]
-        Tag_Store** m_tagstore; // the tag store [SET][block]
+        Tag_Store** m_tagstore; // the tag store [SET] each set manages its self
         uint64_t m_c; // C
         uint64_t m_b; // B
         uint64_t m_s; // S

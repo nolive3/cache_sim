@@ -6,19 +6,21 @@
 class Tag_Store
 {
     public:
-        Tag_Store(uint64_t s);
+        Tag_Store(uint64_t s, uint64_t b, uint64_t c, bool is_blocking);
         virtual ~Tag_Store();
         Tag_Store(const Tag_Store& other) = delete;
         Tag_Store& operator=(const Tag_Store& other) = delete;
-        virtual bool contains(uint64_t index, uint64_t tag) const = 0;
-        virtual uint64_t get_victim(uint64_t tag) = 0;
-        virtual void touch(uint64_t tag) = 0;
-
+        virtual bool access(uint64_t addr) = 0;
     protected:
+        uint64_t tag(uint64_t addr) const;
+        uint64_t offset(uint64_t addr) const;
         uint64_t m_s;
+        uint64_t m_b;
+        uint64_t m_c;
+        bool m_r;
+        bool** m_valid;
         uint64_t m_last;
         uint64_t* m_tags;
-        uint64_t* m_indexes;
     private:
 };
 
