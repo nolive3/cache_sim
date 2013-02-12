@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <unistd.h>
+#include <iostream>
 #include "cachesim.hpp"
 
 void print_help_and_exit(void) {
@@ -26,7 +27,7 @@ int main(int argc, char* argv[]) {
     char f     = DEFAULT_F;
     char r     = DEFAULT_R;
 
-    /* Read arguments */ 
+    /* Read arguments */
     while(-1 != (opt = getopt(argc, argv, "c:b:s:f:r:h"))) {
         switch(opt) {
         case 'c':
@@ -71,19 +72,21 @@ int main(int argc, char* argv[]) {
     cache_stats_t stats;
     memset(&stats, 0, sizeof(cache_stats_t));
 
-    /* Begin reading the file */ 
+    /* Begin reading the file */
     char rw;
     uint64_t address;
-    while (!feof(stdin)) { 
-        int ret = fscanf(stdin, "%c %" PRIx64 "\n", &rw, &address); 
+    while (!feof(stdin)) {
+        int ret = fscanf(stdin, "%c %" PRIx64 "\n", &rw, &address);
         if(ret == 2) {
-            cache_access(rw, address, &stats); 
+            cache_access(rw, address, &stats);
         }
     }
 
     complete_cache(&stats);
 
     print_statistics(&stats);
+    int x;
+    std::cin >> x;
 
     return 0;
 }

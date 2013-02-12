@@ -1,7 +1,7 @@
 #ifndef CACHE_STATE_H
 #define CACHE_STATE_H
-
-
+#include <cstdint>
+#include "cachesim.hpp"
 class Cache_State
 {
     public:
@@ -9,6 +9,10 @@ class Cache_State
         Cache_State(uint64_t c, uint64_t b, uint64_t s, bool is_blocking, bool is_lru);
         /** Default destructor */
         virtual ~Cache_State();
+        Cache_State(const Cache_State&) = delete;
+        const Cache_State& operator=(const Cache_State&) = delete;
+        void read(uint64_t addr, cache_stats_t* p_stats);
+        void write(uint64_t addr, cache_stats_t* p_stats);
         /** Access m_valid
          * \return The current value of m_valid
          */
@@ -31,12 +35,18 @@ class Cache_State
         bool r() { return m_r; }
     protected:
     private:
-        char[][] m_valid; //!< Member variable "m_valid"
-        uint64_t m_c; //!< Member variable "m_c"
-        uint64_t m_b; //!< Member variable "m_b"
-        uint64_t m_s; //!< Member variable "m_s"
-        bool m_f; //!< Member variable "m_f"
-        bool m_r; //!< Member variable "m_r"
+        uint64_t tag(uint64_t addr) const;
+        uint64_t index(uint64_t addr) const;
+        uint64_t offset(uint64_t addr) const;
+        uint64_t valid(uint64_t addr) const;
+        void get(uint64_t addr);
+        bool*** m_valid; // the vaild bits [SET][Block][subblock]
+        uint64_t** m_tagstore; // the tag store [SET][block]
+        uint64_t m_c; // C
+        uint64_t m_b; // B
+        uint64_t m_s; // S
+        bool m_f; // true for blocking false for critical word first
+        bool m_r; // true for LRU false for NMRU_FIFO
 };
 
 #endif // CACHE_STATE_H

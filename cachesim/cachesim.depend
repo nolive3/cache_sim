@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1359550042 source:c:\users\nick\documents\github\cache_sim\cachesim\cachesim_driver.cpp
+1360627541 source:c:\users\nick\documents\github\cache_sim\cachesim\cachesim_driver.cpp
 	<cstdio>
 	<cinttypes>
 	<cstdlib>
@@ -7,6 +7,18 @@
 	<unistd.h>
 	"cachesim.hpp"
 
-1360196218 c:\users\nick\documents\github\cache_sim\cachesim\cachesim.hpp
+1360652632 c:\users\nick\documents\github\cache_sim\cachesim\cachesim.hpp
 	<cstdint>
+
+1360652656 source:c:\users\nick\documents\github\cache_sim\cachesim\cache_state.cpp
+	"Cache_State.h"
+
+1360652596 c:\users\nick\documents\github\cache_sim\cachesim\cache_state.h
+	<cstdint>
+	"cachesim.hpp"
+
+1360651442 source:c:\users\nick\documents\github\cache_sim\cachesim\cachesim.cpp
+	"cachesim.hpp"
+	"Cache_State.h"
+	<iostream>
 
