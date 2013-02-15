@@ -1,37 +1,7 @@
 #include "LRU.h"
 
 
-bool mLRU::access(uint64_t addr)
-{
-    if(contains(addr)){
-        touch(addr);
-        return true;
-    } else if(contains_but_not_valid(addr)){
-        touch(addr);
-        return false;
-    } else {
-        get_victim(addr);
-        return false;
-    }
-}
 
-
-bool mLRU::contains(uint64_t addr) const
-{
-    for (uint64_t i = 0; i < (uint64_t)1<<m_s; i++){
-        if(m_valid[i][offset(addr)] && m_tags[i]==tag(addr))
-            return true;
-    }
-    return false;
-}
-bool mLRU::contains_but_not_valid(uint64_t addr) const
-{
-    for (uint64_t i = 0; i < (uint64_t)1<<m_s; i++){
-        if(m_tags[i]==tag(addr))
-            return true;
-    }
-    return false;
-}
 
 
 void mLRU::get_victim(uint64_t addr)

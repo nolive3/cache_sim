@@ -10,7 +10,7 @@ class Tag_Store
         virtual ~Tag_Store();
         Tag_Store(const Tag_Store& other) = delete;
         Tag_Store& operator=(const Tag_Store& other) = delete;
-        virtual bool access(uint64_t addr) = 0;
+        bool access(uint64_t addr);
     protected:
         uint64_t tag(uint64_t addr) const;
         uint64_t offset(uint64_t addr) const;
@@ -21,6 +21,10 @@ class Tag_Store
         bool** m_valid;
         uint64_t m_last;
         uint64_t* m_tags;
+        bool contains(uint64_t addr) const;
+        bool contains_but_not_valid(uint64_t addr) const;
+        virtual void get_victim(uint64_t tag) = 0;
+        virtual void touch(uint64_t tag) = 0;
     private:
 };
 
