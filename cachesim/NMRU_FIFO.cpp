@@ -1,4 +1,6 @@
 #include "NMRU_FIFO.h"
+#include <iostream>
+#include <iomanip>
 
 
 
@@ -17,6 +19,7 @@ void mNMRU_FIFO::get_victim(uint64_t addr)
             m_valid[i-1] = m_valid[i];
         }
     }
+    m_mru = tag(addr); // just added so most recently used
     m_valid[(1<<m_s)-1] = valids; // set the new valid bits
     for(uint64_t i = 0; i < (uint64_t)1<<m_b; i++){
         if(i>=offset(addr) || m_r) // if it is blocking of this is after the requested byte the it gets fetched

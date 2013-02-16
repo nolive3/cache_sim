@@ -1,5 +1,6 @@
 #include "Tag_Store.h"
-
+#include <iostream>
+#include <iomanip>
 
 
 bool Tag_Store::access(uint64_t addr)
