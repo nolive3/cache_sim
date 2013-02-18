@@ -1,6 +1,6 @@
 fdir = 'res/';
 ftrace = 'mcf';
-fnum = 11;
+fnum = 14;
 ffetch = 'eager';
 frep = 'fifo';
 fnamebase=[fdir ftrace num2str(fnum) ffetch frep];
