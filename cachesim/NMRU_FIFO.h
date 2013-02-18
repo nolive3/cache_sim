@@ -2,14 +2,14 @@
 #define NMRU_FIFO_H
 
 #include "Tag_Store.h"
-#include <cstdint>
+#include <stdint.h>
 
 
 class mNMRU_FIFO : public Tag_Store
 {
     public:
         mNMRU_FIFO(uint64_t s,uint64_t b,uint64_t c,bool r) : Tag_Store(s,b,c,r), m_mru(0) {}
-        virtual ~mNMRU_FIFO() = default;
+        ~mNMRU_FIFO() {};
     protected:
     private:
         void get_victim(uint64_t tag);

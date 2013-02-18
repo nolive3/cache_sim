@@ -1,7 +1,6 @@
 #include "Cache_State.h"
 #include "LRU.h"
 #include "NMRU_FIFO.h"
-#include <iostream>
  // booring setup stuff
 Cache_State::Cache_State(uint64_t nc, uint64_t nb, uint64_t ns, bool is_blocking, bool is_lru) :m_tagstore(new Tag_Store*[1<<(nc-nb-ns)]), m_c(nc), m_b(nb), m_s(ns), m_f(is_blocking), m_r(is_lru)
 {

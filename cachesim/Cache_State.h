@@ -1,6 +1,6 @@
 #ifndef CACHE_STATE_H
 #define CACHE_STATE_H
-#include <cstdint>
+#include <stdint.h>
 #include "Tag_Store.h"
 #include "cachesim.hpp"
 class Cache_State
@@ -10,8 +10,6 @@ class Cache_State
         Cache_State(uint64_t c, uint64_t b, uint64_t s, bool is_blocking, bool is_lru);
         /** Default destructor */
         virtual ~Cache_State();
-        Cache_State(const Cache_State&) = delete;
-        const Cache_State& operator=(const Cache_State&) = delete;
         void read(uint64_t addr, cache_stats_t* p_stats);
         void write(uint64_t addr, cache_stats_t* p_stats);
         /** Access m_valid
@@ -36,6 +34,8 @@ class Cache_State
         bool r() { return m_r; }
     protected:
     private:
+        Cache_State(const Cache_State&);
+        const Cache_State& operator=(const Cache_State&);
         uint64_t index(uint64_t addr) const;
         Tag_Store** m_tagstore; // the tag store [SET] each set manages its self
         uint64_t m_c; // C

@@ -8,7 +8,7 @@ class mLRU : public Tag_Store
 {
     public:
         mLRU(uint64_t s,uint64_t b,uint64_t c,bool r) : Tag_Store(s,b,c,r){}
-        virtual ~mLRU() = default;
+        ~mLRU() {}
     protected:
     private:
         void get_victim(uint64_t tag);

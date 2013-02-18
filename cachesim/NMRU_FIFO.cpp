@@ -1,7 +1,4 @@
 #include "NMRU_FIFO.h"
-#include <iostream>
-#include <iomanip>
-
 
 
 void mNMRU_FIFO::get_victim(uint64_t addr)

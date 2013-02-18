@@ -1,5 +1,5 @@
 #include <cstdio>
-#include <cinttypes>
+#include <stdint.h>
 #include <cstdlib>
 #include <cstring>
 #include <unistd.h>
@@ -58,9 +58,9 @@ int main(int argc, char* argv[]) {
     }
 
     printf("Cache Settings\n");
-    printf("C: %" PRIu64 "\n", c);
-    printf("B: %" PRIu64 "\n", b);
-    printf("S: %" PRIu64 "\n", s);
+    printf("C: %llu\n", c);
+    printf("B: %llu\n", b);
+    printf("S: %llu\n", s);
     printf("F: %s\n", f == BLOCKING ? "BLOCKING" : "EAGER");
     printf("R: %s\n", r == LRU ? "LRU" : "NMRU_FIFO");
     printf("\n");
@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
     char rw;
     uint64_t address;
     while (!feof(stdin)) {
-        int ret = fscanf(stdin, "%c %" PRIx64 "\n", &rw, &address);
+        int ret = fscanf(stdin, "%c %llx\n", &rw, &address);
         if(ret == 2) {
             cache_access(rw, address, &stats);
         }
@@ -91,19 +91,19 @@ int main(int argc, char* argv[]) {
 
 void print_statistics(cache_stats_t* p_stats) {
     printf("Cache Statistics\n");
-    printf("Accesses: %" PRIu64 "\n", p_stats->accesses);
-    printf("Reads: %" PRIu64 "\n", p_stats->reads);
-    printf("Read hits: %" PRIu64 "\n", p_stats->read_hits);
-    printf("Read misses: %" PRIu64 "\n", p_stats->read_misses);
-    printf("Writes: %" PRIu64 "\n", p_stats->writes);
-    printf("Write hits: %" PRIu64 "\n", p_stats->write_hits);
-    printf("Write misses: %" PRIu64 "\n", p_stats->write_misses);
-    printf("Misses: %" PRIu64 "\n", p_stats->misses);
-    printf("Hit Time: %" PRIu64 "\n", p_stats->hit_time);
-    printf("Miss Penalty: %" PRIu64 "\n", p_stats->miss_penalty);
+    printf("Accesses: %llu\n", p_stats->accesses);
+    printf("Reads: %llu\n", p_stats->reads);
+    printf("Read hits: %llu\n", p_stats->read_hits);
+    printf("Read misses: %llu\n", p_stats->read_misses);
+    printf("Writes: %llu\n", p_stats->writes);
+    printf("Write hits: %llu\n", p_stats->write_hits);
+    printf("Write misses: %llu\n", p_stats->write_misses);
+    printf("Misses: %llu\n", p_stats->misses);
+    printf("Hit Time: %llu\n", p_stats->hit_time);
+    printf("Miss Penalty: %llu\n", p_stats->miss_penalty);
     printf("Miss rate: %f\n", p_stats->miss_rate);
     printf("Average access time (AAT): %f\n", p_stats->avg_access_time);
-    printf("Storage Overhead: %" PRIu64 "\n", p_stats->storage_overhead);
+    printf("Storage Overhead: %llu\n", p_stats->storage_overhead);
     printf("Storage Overhead Ratio: %f\n", p_stats->storage_overhead_ratio);
 }
 

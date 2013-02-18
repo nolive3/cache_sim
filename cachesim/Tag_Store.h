@@ -1,6 +1,6 @@
 #ifndef TAG_STORE_H
 #define TAG_STORE_H
-#include <cstdint>
+#include <stdint.h>
 
 
 class Tag_Store
@@ -8,8 +8,6 @@ class Tag_Store
     public:
         Tag_Store(uint64_t s, uint64_t b, uint64_t c, bool is_blocking);
         virtual ~Tag_Store();
-        Tag_Store(const Tag_Store& other) = delete;
-        Tag_Store& operator=(const Tag_Store& other) = delete;
         bool access(uint64_t addr);
     protected:
         uint64_t tag(uint64_t addr) const;
@@ -26,6 +24,8 @@ class Tag_Store
         virtual void get_victim(uint64_t tag) = 0;
         virtual void touch(uint64_t tag) = 0;
     private:
+        Tag_Store(const Tag_Store& other);
+        Tag_Store& operator=(const Tag_Store& other);
 };
 
 #endif // TAG_STORE_H

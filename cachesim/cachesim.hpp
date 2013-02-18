@@ -1,7 +1,7 @@
 #ifndef CACHESIM_HPP
 #define CACHESIM_HPP
 
-#include <cstdint>
+#include <stdint.h>
 
 struct cache_stats_t {
     uint64_t accesses;
