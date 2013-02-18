@@ -1,0 +1,65 @@
+if [ $# -ne 3 ]
+then
+	echo; echo
+	echo "Usage:"
+	echo "	$0 <is_blocking> <is_lru> <trace_file>"
+	echo; echo
+	exit
+fi
+
+let "F=$1" #is blocking?
+let "R=$2" #is lru?
+I=$3
+
+let "max_size=$((8*48*2**10))"   # 48kB in bits
+
+
+
+size () {
+	local c=$1
+	local b=$2
+	local s=$3
+	local f=$4
+	local r=$5
+	local p=1
+
+	if [ $((f)) -ne 0 ] 
+	then 
+		p=$(($p+1))
+	else 
+		p=$(($p+$((2**$b))))
+	fi
+	if [ $((r)) -ne 0 ]
+	then
+		p=$(($p+8))
+	else
+		p=$(($p+4))
+	fi
+	t=$(($p*$((2**$(($c-$b))))))
+	m=$(($t+8*$((2**$c))))
+	echo $m
+}
+C=0
+
+while [ $(size $C $C 0 $F $R) -le $((max_size)) ]
+do
+	B=0
+	while [ $B -le $C ]
+	do
+		S=0
+		while [ $(($B+$S)) -le $C ]
+		do
+			echo -n "$C $B $S "
+			if [ $(size $C $B $S $F $R) -ge $((max_size)) ]
+			then
+				echo -1 # invalid = -1 quality
+			else
+				echo $( (./cachesim -c $C -b $B -s $S -f $F -r $R < $I) | grep -e "AAT" | awk '{ print($5) }')
+			fi
+			S=$(($S+1))
+		done
+		B=$(($B+1))
+	done
+	C=$(($C+1))
+done
+
