@@ -1,15 +1,16 @@
-if [ $# -ne 3 ]
+if [ $# -ne 4 ]
 then
 	echo; echo
 	echo "Usage:"
-	echo "	$0 <is_blocking> <is_lru> <trace_file>"
+	echo "	$0 <log_cache_size> <is_blocking> <is_lru> <trace_file>"
 	echo; echo
 	exit
 fi
 
-let "F=$1" #is blocking?
-let "R=$2" #is lru?
-I=$3
+let "C=$1"
+let "F=$2" #is blocking?
+let "R=$3" #is lru?
+I=$4
 
 let "max_size=$((8*48*2**10))"   # 48kB in bits
 
@@ -39,27 +40,21 @@ size () {
 	m=$(($t+8*$((2**$c))))
 	echo $m
 }
-C=0
-
-while [ $(size $C $C 0 $F $R) -le $((max_size)) ]
+B=0
+while [ $B -le $C ]
 do
-	B=0
-	while [ $B -le $C ]
+	S=0
+	while [ $(($B+$S)) -le $C ]
 	do
-		S=0
-		while [ $(($B+$S)) -le $C ]
-		do
-			echo -n "$C $B $S "
-			if [ $(size $C $B $S $F $R) -ge $((max_size)) ]
-			then
-				echo -1 # invalid = -1 quality
-			else
-				echo $( (./cachesim -c $C -b $B -s $S -f $F -r $R < $I) | grep -e "AAT" | awk '{ print($5) }')
-			fi
-			S=$(($S+1))
-		done
-		B=$(($B+1))
+		echo -n "$C $B $S "
+		if [ $(size $C $B $S $F $R) -ge $((max_size)) ]
+		then
+			echo -1 # invalid = -1 quality
+		else
+			echo $( (./cachesim -c $C -b $B -s $S -f $F -r $R < $I) | grep -e "AAT" | awk '{ print($5) }')
+		fi
+		S=$(($S+1))
 	done
-	C=$(($C+1))
+	B=$(($B+1))
 done
 
