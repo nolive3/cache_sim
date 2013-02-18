@@ -46,10 +46,10 @@ do
 	S=0
 	while [ $(($B+$S)) -le $C ]
 	do
-		echo -n "$C $B $S "
+		echo -n "$B $S "
 		if [ $(size $C $B $S $F $R) -ge $((max_size)) ]
 		then
-			echo -1 # invalid = -1 quality
+			echo 10000 # invalid = 10000 quality
 		else
 			echo $( (./cachesim -c $C -b $B -s $S -f $F -r $R < $I) | grep -e "AAT" | awk '{ print($5) }')
 		fi
