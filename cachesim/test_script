@@ -8,8 +8,8 @@ then
 fi
 
 let "C=$1"
-let "F=$2" #is blocking?
-let "R=$3" #is lru?
+F=$2 #is blocking?
+R=$3 #is lru?
 I=$4
 
 let "max_size=$((8*48*2**10))"   # 48kB in bits
@@ -24,17 +24,17 @@ size () {
 	local r=$5
 	local p=1
 
-	if [ $((f)) -ne 0 ] 
+	if [ $f='B' ] 
 	then 
-		p=$(($p+1))
-	else 
 		p=$(($p+$((2**$b))))
+	else 
+		p=$(($p+1))
 	fi
-	if [ $((r)) -ne 0 ]
+	if [ $r='L' ]
 	then
-		p=$(($p+8))
-	else
 		p=$(($p+4))
+	else
+		p=$(($p+8))
 	fi
 	t=$(($p*$((2**$(($c-$b))))))
 	m=$(($t+8*$((2**$c))))
