@@ -1,0 +1,5 @@
+Best for astar is (C:15,B:9,S:2,F:E,R:L) with AAT of 2.024719
+Best for bzip2 is (C:15,B:12,S:2,F:E,R:L) with AAT of 1.004870
+Best for mcf is (C:15,B:8,S:2,F:E,R:L) with AAT of 1.482001
+Best for perlbench is (C:15,B:7,S:2,F:B,R:L) with AAT of 3.013495
+
