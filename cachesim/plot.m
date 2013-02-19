@@ -1,4 +1,4 @@
-fdir = 'res';
+fdir = 'res/';
 fresdir = 'imgs';
 ftrace = 'astar';
 fnum = 6;
