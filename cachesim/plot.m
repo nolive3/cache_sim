@@ -1,9 +1,12 @@
 fdir = 'res/';
 fresdir = 'imgs';
-ftrace = 'astar';
-fnum = 6;
-ffetch = 'B';
-frep = 'L';
+if length(argv) != 4
+	error('Arguments: <trace_file_name> <trial_number(0..15)> <fetch_policy(B,E)> <replacement_policy(L,N)>')
+end
+ftrace = argv(){1};
+fnum = argv(){2};
+ffetch = argv(){3};
+frep = argv(){4};
 fnamebase=[ftrace ffetch frep num2str(fnum)];
 fname = [fdir fnamebase '.res'];
 fout = [fresdir fnamebase '.png'];

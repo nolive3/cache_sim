@@ -1,9 +1,11 @@
 fdir = 'res/';
-ftrace = 'perlbench';
+if length(argv) != 1
+	error('Arguments: <trace_file_name>')
+end
+ftrace = argv(){1};
 fnum = 0:15;
 ffetch = 'BE';
 frep = 'LN';
-fout = [fdir ftrace '.out'];
 ro = 1;
 for fet = ffetch
 for rep = frep
