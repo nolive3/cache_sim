@@ -32,4 +32,4 @@ ro += 16;
 end
 end
 pos = A(:,4) == min(A(:,4));
-printf('Best for %s is (C:%d,B:%d,S:%d,F:%s,R:%s) with AAT of %f', ftrace, A(pos,1), A(pos,2), A(pos,3), C(pos,1), D(pos,1), A(pos,4))
+printf('Best for %s is (C:%d,B:%d,S:%d,F:%s,R:%s) with AAT of %f\n', ftrace, A(pos,1), A(pos,2), A(pos,3), C(pos,1), D(pos,1), A(pos,4))
