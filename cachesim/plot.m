@@ -1,11 +1,12 @@
-fdir = '';
+fdir = 'res';
+fresdir = 'imgs';
 ftrace = 'astar';
 fnum = 6;
 ffetch = 'B';
 frep = 'L';
-fnamebase=[fdir ftrace ffetch frep num2str(fnum)];
-fname = [fnamebase '.res'];
-fout = [fnamebase '.png'];
+fnamebase=[ftrace ffetch frep num2str(fnum)];
+fname = [fdir fnamebase '.res'];
+fout = [fresdir fnamebase '.png'];
 in = transpose(dlmread(fname));
 mx = 0;
 my = 0;

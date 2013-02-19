@@ -1,4 +1,4 @@
-fdir = '';
+fdir = 'res';
 ftrace = 'perlbench';
 fnum = 0:15;
 ffetch = 'BE';
