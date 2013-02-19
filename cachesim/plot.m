@@ -1,9 +1,9 @@
-fdir = 'res/';
-ftrace = 'mcf';
-fnum = 14;
-ffetch = 'eager';
-frep = 'fifo';
-fnamebase=[fdir ftrace num2str(fnum) ffetch frep];
+fdir = '';
+ftrace = 'astar';
+fnum = 6;
+ffetch = 'B';
+frep = 'L';
+fnamebase=[fdir ftrace ffetch frep num2str(fnum)];
 fname = [fnamebase '.res'];
 fout = [fnamebase '.png'];
 in = transpose(dlmread(fname));
@@ -17,13 +17,15 @@ Y = transpose(1:my);
 for line = in
 	Z(line(1)+1,line(2)+1)=line(3);
 end
-res = in(:,find(in(3,:) == min(min(Z))));
+res = in(:,in(3,:) == min(min(Z)));
 r2 = num2cell(res);
 [B, S, AAT] = deal(r2{:});
+
 Z = log(log(Z));
 mz = max(max(Z))+1;
 h = figure;
 surf(X, Y, Z);
+title([ftrace " C:" num2str(fnum)]);
 text(mx, my/2, mz, ["Minimum B = " num2str(B)]);
 text(mx, my/2, mz-.2, ["Minimum S = " num2str(S)]);
 text(mx, my/2, mz-.4, ["Minimum AAT = " num2str(AAT)]);
