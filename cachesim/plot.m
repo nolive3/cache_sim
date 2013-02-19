@@ -1,5 +1,5 @@
 fdir = 'res/';
-fresdir = 'imgs';
+fresdir = 'imgs/';
 if length(argv) != 4
 	error('Arguments: <trace_file_name> <trial_number(0..15)> <fetch_policy(B,E)> <replacement_policy(L,N)>')
 end
